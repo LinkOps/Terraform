@@ -19,6 +19,11 @@ cp shared/home-lab.example.json shared/home-lab.json
 
 Then edit:
 - `proxmox_hosts`: one entry per Proxmox host/node
+  - `api_token_id` and `api_token_secret` per host
+  - `storage_pools` per host with purpose-based split:
+    - `lxc_rootfs` (LXC disk)
+    - `vm_disk` (VM disk)
+    - `snippets` (cloud-init snippets storage)
 - `network_profiles`: reusable network defaults (bridge, gateway, dns)
 
 This lets each project pick a host target without duplicating host/network settings.
@@ -37,13 +42,13 @@ This lets each project pick a host target without duplicating host/network setti
 ## Prerequisites
 
 1. Terraform `>= 1.6`.
-2. A Proxmox API token with permissions to create/manage VM and LXC resources on your target nodes.
+2. Proxmox API tokens configured in `shared/home-lab.json` for each host you plan to target.
 3. For LXC mode:
    - Debian 12 template present in Proxmox storage (or update `lxc_template`).
    - Network route to SSH into the new container from where Terraform runs.
 4. For VM mode:
    - Cloud-init capable template VM matching `vm_clone_template`.
-   - Upload `grafana-cloud-init.yaml` to Proxmox snippets storage and reference accordingly.
+   - Upload `grafana-cloud-init.yaml` to your chosen snippets storage.
 
 ## Quick start
 

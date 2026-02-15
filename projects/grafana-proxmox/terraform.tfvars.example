@@ -7,9 +7,6 @@ proxmox_host_key = "pve1"
 # Pick a shared network profile from shared config.
 network_profile_key = "lan"
 
-pm_api_token_id     = "terraform@pve!grafana"
-pm_api_token_secret = "replace-me"
-
 # lxc (preferred) or vm (fallback)
 deployment_mode = "lxc"
 

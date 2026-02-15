@@ -17,7 +17,7 @@ resource "proxmox_lxc" "grafana" {
   ssh_public_keys = var.ssh_public_key
 
   rootfs {
-    storage = local.selected_proxmox_host.storage
+    storage = local.selected_storage_pools.lxc_rootfs
     size    = "${var.disk_size_gb}G"
   }
 
@@ -81,7 +81,7 @@ resource "proxmox_vm_qemu" "grafana" {
 
   disk {
     type    = "scsi"
-    storage = local.selected_proxmox_host.storage
+    storage = local.selected_storage_pools.vm_disk
     size    = "${var.disk_size_gb}G"
   }
 
@@ -97,5 +97,5 @@ resource "proxmox_vm_qemu" "grafana" {
   ciuser     = "ubuntu"
   cipassword = var.root_password
 
-  cicustom = "user=local:snippets/grafana-cloud-init.yaml"
+  cicustom = "user=${local.selected_storage_pools.snippets}:snippets/grafana-cloud-init.yaml"
 }

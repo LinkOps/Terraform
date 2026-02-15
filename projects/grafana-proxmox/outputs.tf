@@ -12,3 +12,8 @@ output "proxmox_host" {
   description = "Selected Proxmox host key from shared config."
   value       = var.proxmox_host_key
 }
+
+output "proxmox_target_node" {
+  description = "Selected Proxmox target node from shared config."
+  value       = local.selected_proxmox_host.target_node
+}

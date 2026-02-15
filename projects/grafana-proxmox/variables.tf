@@ -15,17 +15,6 @@ variable "network_profile_key" {
   default     = "lan"
 }
 
-variable "pm_api_token_id" {
-  description = "Proxmox API token ID in the format user@realm!tokenid."
-  type        = string
-}
-
-variable "pm_api_token_secret" {
-  description = "Proxmox API token secret."
-  type        = string
-  sensitive   = true
-}
-
 variable "deployment_mode" {
   description = "Use lxc for Proxmox container (preferred) or vm if your environment cannot run Grafana in LXC."
   type        = string
