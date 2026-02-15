@@ -1,31 +1,31 @@
 resource "proxmox_lxc" "grafana" {
   count       = var.deployment_mode == "lxc" ? 1 : 0
-  target_node = var.target_node
+  target_node = local.selected_proxmox_host.target_node
   vmid        = var.lxc_vmid
   hostname    = var.hostname
 
-  ostemplate    = var.lxc_template
-  password      = var.root_password
-  unprivileged  = true
-  start         = true
-  onboot        = true
-  cores         = var.cores
-  memory        = var.memory_mb
-  swap          = 512
-  nameserver    = var.nameserver
-  searchdomain  = "local"
+  ostemplate      = var.lxc_template
+  password        = var.root_password
+  unprivileged    = true
+  start           = true
+  onboot          = true
+  cores           = var.cores
+  memory          = var.memory_mb
+  swap            = 512
+  nameserver      = local.selected_network.nameserver
+  searchdomain    = "local"
   ssh_public_keys = var.ssh_public_key
 
   rootfs {
-    storage = var.storage
+    storage = local.selected_proxmox_host.storage
     size    = "${var.disk_size_gb}G"
   }
 
   network {
     name   = "eth0"
-    bridge = var.bridge
+    bridge = local.selected_network.bridge
     ip     = var.ip_cidr
-    gw     = var.gateway
+    gw     = local.selected_network.gateway
   }
 
   features {
@@ -53,7 +53,7 @@ resource "null_resource" "install_grafana_lxc" {
     inline = [
       "set -euxo pipefail",
       "apt-get update",
-      "apt-get install -y apt-transport-https software-properties-common wget",
+      "apt-get install -y apt-transport-https software-properties-common wget gnupg",
       "mkdir -p /etc/apt/keyrings",
       "wget -q -O - https://apt.grafana.com/gpg.key | gpg --dearmor -o /etc/apt/keyrings/grafana.gpg",
       "echo 'deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main' > /etc/apt/sources.list.d/grafana.list",
@@ -67,7 +67,7 @@ resource "null_resource" "install_grafana_lxc" {
 
 resource "proxmox_vm_qemu" "grafana" {
   count       = var.deployment_mode == "vm" ? 1 : 0
-  target_node = var.target_node
+  target_node = local.selected_proxmox_host.target_node
   vmid        = var.vm_vmid
   name        = "${var.hostname}-vm"
   clone       = var.vm_clone_template
@@ -81,17 +81,17 @@ resource "proxmox_vm_qemu" "grafana" {
 
   disk {
     type    = "scsi"
-    storage = var.storage
+    storage = local.selected_proxmox_host.storage
     size    = "${var.disk_size_gb}G"
   }
 
   network {
     model  = "virtio"
-    bridge = var.bridge
+    bridge = local.selected_network.bridge
   }
 
-  ipconfig0 = "ip=${var.ip_cidr},gw=${var.gateway}"
-  nameserver = var.nameserver
+  ipconfig0  = "ip=${var.ip_cidr},gw=${local.selected_network.gateway}"
+  nameserver = local.selected_network.nameserver
   sshkeys    = var.ssh_public_key
 
   ciuser     = "ubuntu"

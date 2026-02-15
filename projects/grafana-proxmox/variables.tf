@@ -1,6 +1,18 @@
-variable "pm_api_url" {
-  description = "Proxmox API URL (for example: https://pve.local:8006/api2/json)."
+variable "shared_config_file" {
+  description = "Path to shared JSON config containing proxmox_hosts and network_profiles."
   type        = string
+  default     = "../../shared/home-lab.json"
+}
+
+variable "proxmox_host_key" {
+  description = "Key from shared_config.proxmox_hosts selecting where to deploy this project."
+  type        = string
+}
+
+variable "network_profile_key" {
+  description = "Key from shared_config.network_profiles selecting bridge, gateway, and DNS settings."
+  type        = string
+  default     = "lan"
 }
 
 variable "pm_api_token_id" {
@@ -12,17 +24,6 @@ variable "pm_api_token_secret" {
   description = "Proxmox API token secret."
   type        = string
   sensitive   = true
-}
-
-variable "pm_tls_insecure" {
-  description = "Set true only if your Proxmox API uses a self-signed certificate."
-  type        = bool
-  default     = true
-}
-
-variable "target_node" {
-  description = "Proxmox node that will host Grafana."
-  type        = string
 }
 
 variable "deployment_mode" {
@@ -60,24 +61,8 @@ variable "hostname" {
   default     = "grafana"
 }
 
-variable "bridge" {
-  description = "Proxmox network bridge (for example vmbr0)."
-  type        = string
-  default     = "vmbr0"
-}
-
 variable "ip_cidr" {
   description = "CIDR address for the workload network interface (for example 192.168.1.50/24)."
-  type        = string
-}
-
-variable "gateway" {
-  description = "Default gateway for the Grafana workload."
-  type        = string
-}
-
-variable "nameserver" {
-  description = "DNS nameserver IP for the Grafana workload."
   type        = string
 }
 
@@ -90,12 +75,6 @@ variable "root_password" {
 variable "ssh_public_key" {
   description = "SSH public key copied to root inside LXC/VM."
   type        = string
-}
-
-variable "storage" {
-  description = "Storage target for disk volumes."
-  type        = string
-  default     = "local-lvm"
 }
 
 variable "disk_size_gb" {

@@ -7,3 +7,8 @@ output "deployment_mode" {
   description = "Selected deployment mode."
   value       = var.deployment_mode
 }
+
+output "proxmox_host" {
+  description = "Selected Proxmox host key from shared config."
+  value       = var.proxmox_host_key
+}
