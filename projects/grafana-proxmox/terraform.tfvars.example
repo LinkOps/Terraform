@@ -1,0 +1,16 @@
+pm_api_url          = "https://pve.home.local:8006/api2/json"
+pm_api_token_id     = "terraform@pve!grafana"
+pm_api_token_secret = "replace-me"
+pm_tls_insecure     = true
+
+target_node = "pve"
+
+# lxc (preferred) or vm (fallback)
+deployment_mode = "lxc"
+
+ip_cidr    = "192.168.1.60/24"
+gateway    = "192.168.1.1"
+nameserver = "192.168.1.1"
+
+root_password  = "replace-me"
+ssh_public_key = "ssh-ed25519 AAAA... your-key"
