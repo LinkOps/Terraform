@@ -1,0 +1,35 @@
+{
+  "proxmox_hosts": {
+    "pve1": {
+      "api_url": "https://pve1.home.local:8006/api2/json",
+      "target_node": "pve1",
+      "tls_insecure": true,
+      "api_token_id": "terraform@pve!grafana-pve1",
+      "api_token_secret": "replace-with-secret-for-pve1",
+      "storage_pools": {
+        "lxc_rootfs": "local-lvm",
+        "vm_disk": "fast-ssd",
+        "snippets": "local"
+      }
+    },
+    "pve2": {
+      "api_url": "https://pve2.home.local:8006/api2/json",
+      "target_node": "pve2",
+      "tls_insecure": true,
+      "api_token_id": "terraform@pve!grafana-pve2",
+      "api_token_secret": "replace-with-secret-for-pve2",
+      "storage_pools": {
+        "lxc_rootfs": "local-lvm",
+        "vm_disk": "bulk-hdd",
+        "snippets": "local"
+      }
+    }
+  },
+  "network_profiles": {
+    "lan": {
+      "bridge": "vmbr0",
+      "gateway": "192.168.1.1",
+      "nameserver": "192.168.1.1"
+    }
+  }
+}
